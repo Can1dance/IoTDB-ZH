@@ -641,6 +641,31 @@ public class AnomalyTests {
   }
 
   @Test
+  public void testUDTFRangePro() {
+    String sqlStr =
+        "select rangepro(d2.s1,\"abnormal_level:100,120,140,160,180,200\",\"matchName:高二\") from root.vehicle";
+    try (Connection connection = EnvFactory.getEnv().getConnection();
+        Statement statement = connection.createStatement()) {
+      ResultSet resultSet = statement.executeQuery(sqlStr);
+      resultSet.next();
+      double result1 = resultSet.getDouble(1);
+      resultSet.next();
+      double result2 = resultSet.getDouble(1);
+      resultSet.next();
+      double result3 = resultSet.getDouble(1);
+      resultSet.next();
+      double result4 = resultSet.getDouble(1);
+      Assert.assertEquals(0.0, result1, 0.01);
+      Assert.assertEquals(50.0, result2, 0.01);
+      Assert.assertEquals(50.0, result3, 0.01);
+      Assert.assertEquals(0.0, result4, 0.01);
+      Assert.assertFalse(resultSet.next());
+    } catch (SQLException throwable) {
+      fail(throwable.getMessage());
+    }
+  }
+
+  @Test
   public void testKSigma2() {
     String sqlStr = "select ksigma(d2.s2,\"k\"=\"1.0\") from root.vehicle";
     try (Connection connection = EnvFactory.getEnv().getConnection();

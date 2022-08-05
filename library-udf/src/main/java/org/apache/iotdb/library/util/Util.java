@@ -132,6 +132,9 @@ public class Util {
         break;
       case BOOLEAN:
         pc.putBoolean(t, (Boolean) o);
+        break;
+      case TEXT:
+        pc.putString(t, (String) o);
     }
   }
 
